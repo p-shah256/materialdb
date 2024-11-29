@@ -1,0 +1,12 @@
+[
+  {
+    "directory": "/home/shah256/Desktop/materialscore/src/cv",
+    "command": "g++ -std=c++17 -I/nix/store/4v86ag8p9ymmw2dr4h31bjbni4b9bzzn-opencv-4.9.0/include/opencv4 -c TableDetector.cpp -o TableDetector.o",
+    "file": "TableDetector.cpp"
+  },
+  {
+    "directory": "/home/shah256/Desktop/materialscore/src/cv",
+    "command": "g++ -std=c++17 -I/nix/store/4v86ag8p9ymmw2dr4h31bjbni4b9bzzn-opencv-4.9.0/include/opencv4 -c main.cpp -o main.o",
+    "file": "main.cpp"
+  }
+]
