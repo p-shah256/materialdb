@@ -68,7 +68,6 @@ std::vector<Table> TableDetector::detectTables(const cv::Mat &image) {
 
 std::vector<TableCell> TableDetector::extractCells(const cv::Mat &tableImage,
                                                    const cv::Mat &gridRoi) {
-
     // Invert to find cells
     cv::Mat invertedRoi;
     cv::bitwise_not(gridRoi, invertedRoi);
@@ -116,12 +115,12 @@ std::vector<TableCell> TableDetector::extractCells(const cv::Mat &tableImage,
 }
 
 bool TableDetector::checkCellOverlap(const cv::Rect &cell1, const cv::Rect &cell2) const {
-
     return (
         std::abs(cell1.x - cell2.x) < params.cellOverlapThreshold &&
         std::abs(cell1.y - cell2.y) < params.cellOverlapThreshold &&
         std::abs(cell1.x + cell1.width - (cell2.x + cell2.width)) < params.cellOverlapThreshold &&
-        std::abs(cell1.y + cell1.height - (cell2.y + cell2.height)) < params.cellOverlapThreshold);
+        std::abs(cell1.y + cell1.height - (cell2.y + cell2.height)) < params.cellOverlapThreshold
+    );
 }
 
 void TableDetector::showImage(const cv::Mat& image, const std::string& title) {
@@ -146,38 +145,25 @@ void TableDetector::showImage(const cv::Mat& image, const std::string& title) {
 
 cv::Mat TableDetector::visualizeTables(const cv::Mat &image, const std::vector<Table> &tables,
                                        bool showCellNumbers) {
-
-    cv::Mat result;
-    if (image.channels() == 1) {
-        cv::cvtColor(image, result, cv::COLOR_GRAY2BGR);
-    } else {
-        result = image.clone();
-    }
-
+    result = image.clone();
     for (size_t tableIdx = 0; tableIdx < tables.size(); ++tableIdx) {
         const auto &table = tables[tableIdx];
-
-        // Draw table boundary
         cv::rectangle(result, cv::Point(table.x, table.y),
                       cv::Point(table.x + table.width, table.y + table.height),
                       cv::Scalar(0, 0, 255), 2);
 
-        // Draw cells
         for (size_t cellIdx = 0; cellIdx < table.cells.size(); ++cellIdx) {
             const auto &cell = table.cells[cellIdx];
             int absX = table.x + cell.x;
             int absY = table.y + cell.y;
 
             cv::rectangle(result, cv::Point(absX, absY),
-                          cv::Point(absX + cell.width, absY + cell.height), cv::Scalar(0, 255, 0),
-                          1);
-
+                          cv::Point(absX + cell.width, absY + cell.height), cv::Scalar(0, 255, 0),1);
             if (showCellNumbers) {
                 cv::putText(result, std::to_string(cellIdx), cv::Point(absX + 5, absY + 20),
                             cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0), 1);
             }
         }
     }
-
     return result;
 }
